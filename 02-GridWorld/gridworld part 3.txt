@@ -1,0 +1,19 @@
+1)
+a. It could turn to another direction.
+b. It could turn to another direction.
+c. It would turn to another direction.
+d. It would turn to another direction to avoid it.
+e. It could turn to another direction to avoid it.
+f. Does the jumper jump over other things as well as in other jumpers?
+
+2)
+a. The Jumper should extend Actor because it acts with Bug methods.
+b. Yes, the Bug class that it acts like.
+c. Yes, it should have a color parameter to distinguish it. 
+d. The act() function.
+e. The methods to add should be canjump() and jump().
+f. Place the Jumper:
+	• On the edge of the grid, facing the edge
+	• One from the edge of the grid, facing the edge
+	• Surrounded by rocks, flowers, Actors
+	• Place a rock, flower, or an actor in the location two in front of the Jumper
