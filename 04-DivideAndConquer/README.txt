@@ -1,0 +1,1 @@
+If the array is sorted, you can divide and conquer again. Split the array in half and locate which part the thing you're searching for in the array and recursively halve and search the array until you find it or not if it's not in the array. 
