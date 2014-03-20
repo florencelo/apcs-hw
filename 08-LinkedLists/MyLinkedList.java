@@ -95,6 +95,9 @@ T2 = tmp;
 tmp = tmp.getNext();
 i = i+1;
 }
+
+// result: tmp is at event point and t2 is one before
+t2.setNext(tmp.getNext()); or t2.setNext(t2.getNext().getNext());
      */
 	
     public String toString()
