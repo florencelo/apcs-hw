@@ -81,6 +81,20 @@ Method 1: use a loop a la toString to calculate the length and return it O(n)
 Method 2: make a length instance variable add 1 to length in add routines subtract 1 from length in remove routines just returns length amortized O(k)
 
 amortized - calc use of money over time
+
+empty list
+head -> dummy(null)
+head -> dummy -> 0 -> 1 -> 2...
+
+i = 0;
+tmp = head.getNext();
+T2 = head;
+
+while (i<n){
+T2 = tmp;
+tmp = tmp.getNext();
+i = i+1;
+}
      */
 	
     public String toString()
