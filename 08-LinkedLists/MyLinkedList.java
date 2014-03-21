@@ -112,6 +112,50 @@ t2.setNext(tmp.getNext()); or t2.setNext(t2.getNext().getNext());
 	return output;
     }
 
+    /*public int size(){
+		int count = 0;
+		Node curr = head;
+		while(curr != null){//traverse through list
+			count++;
+			curr = curr.next;
+		}
+		return count;
+	}*/    
+    
+    public int find(String s) {
+
+		if (s == null) // look for a null element in the list
+		{
+			int index = 0;
+			for (Node p = head; p != null; p = p.getNext()) {
+				if (p.getNext() == null) {
+					return index;
+				}
+				index++;
+			}
+		} else 
+		{
+			int index = 0;
+			for (Node p = head; p != null; p = p.getNext()) {
+				if (s.equals(p.getNext())) {
+					return index;
+				}
+				index++;
+			}
+		}
+		return -1;
+	}
+
+    
+   public String set( int i, String s )
+    {
+    Node p = new Node(s);
+    String oldVal = p.getData();
+    p.setData(s); 
+   return oldVal;
+    }
+    
+    
     public static void main(String[] args){
     	MyLinkedList L = new MyLinkedList();
 
