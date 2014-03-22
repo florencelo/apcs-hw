@@ -1,11 +1,12 @@
-public class MyLinkedList {
+public class MyLinkedList2 {
 
     private Node head;
     private int listCount;
 
-    public MyLinkedList() {
-	head = null;
-	listCount = 0;
+    public MyLinkedList2() {
+    	
+    	head = new Node("");
+    	listCount = 0;
     }
     
     public void add(String d) {
@@ -157,17 +158,25 @@ t2.setNext(tmp.getNext()); or t2.setNext(t2.getNext().getNext());
     
     
     public static void main(String[] args){
-    	MyLinkedList L = new MyLinkedList();
+    	MyLinkedList2 L = new MyLinkedList2();
 
     	L.add("Sully");
     	System.out.println(L);
-    	L.add("mike");
+    	L.add("Mike");
     	System.out.println(L);
-    	L.add("randall");
+    	L.add("Randall");
     	System.out.println(L);
-    	L.add("boo");
+    	L.add("Boo");
     	System.out.println(L);
-
+    	L.add("Boo");
+    	System.out.println(L);
+    	L.add(2,"Boo");
+    	System.out.println(L);
+    	L.remove(2);
+    	System.out.println(L);
+    	L.get(3);
+    	System.out.println(L);
+    	
     }
 
 
