@@ -29,7 +29,7 @@ public class DoubleLL<E>{
 	}
 	else{
 	    n.next = current;
-	    current.prev = n;
+	    //current.prev = n;
 	    current = n;
 	}
     }
@@ -66,15 +66,16 @@ public class DoubleLL<E>{
 	DoubleLL<String> L = new DoubleLL<String>();
 	System.out.println(L);
 	L.insert("hello");
-	//System.out.println(L.getCurrent().getNext());
 	System.out.println(L);
 	L.insert("world");
 	System.out.println(L);
 	L.insert("three");
 	System.out.println(L);
 	System.out.println(L.getCurrent());
-	//	L.forward();
-	System.out.println(L.getCurrent());
+	L.foward();
+	System.out.println();
+	System.out.println(L.getCurrent());	
+	System.out.println();
 	L.insert("inserted");
 	System.out.println(L);
 
