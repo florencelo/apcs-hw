@@ -28,8 +28,12 @@ public class DoubleLL<E>{
 	    current = n;
 	}
 	else{
+	    if(current.prev != null){
+		current.prev.next = n;
+		n.prev = current.prev;
+	    }
 	    n.next = current;
-	    //current.prev = n;
+	    current.prev = n;
 	    current = n;
 	}
     }
@@ -72,10 +76,9 @@ public class DoubleLL<E>{
 	L.insert("three");
 	System.out.println(L);
 	System.out.println(L.getCurrent());
-	L.foward();
-	System.out.println();
-	System.out.println(L.getCurrent());	
-	System.out.println();
+       	L.foward();
+	System.out.println(L);
+	System.out.println(L.getCurrent());
 	L.insert("inserted");
 	System.out.println(L);
 
