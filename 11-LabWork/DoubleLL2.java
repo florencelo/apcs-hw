@@ -25,11 +25,9 @@ public class DoubleLL2<E>{
     public void insert(E d){
 	Node<E> n = new Node<E>(d);
 	if (current==null){
-	    current = n;
-	    n = n.getNext();
-	}if (current.getNext() = current){
-	    current.setNext(n);
-	    n.setNext(current);
+		current = n;
+		current.prev = n;
+		current.next = n;
 	}
 	else{
 	    Node temp = current.getNext();
@@ -41,6 +39,7 @@ public class DoubleLL2<E>{
 	//n.next = current;
 	//current.prev = n;
 	current = n;
+	size ++;
     }
 
 
@@ -57,23 +56,69 @@ public class DoubleLL2<E>{
 	}
     }
 
-    public String toString(){
-	if(current == null)
-	    return "";
-	while( current.getPrev() != null)
+    public String toString(){ //change so it ends when it reaches the beginning. No more null.
+    	Node<E> a = current;
+	if(current == a)
+	    return " " + current;
+	while( current.getPrev() != a)
 	    current = current.getPrev();
 
 	Node<E> tmp = current;
 	String s = "";
-	while(tmp != null){
+	while(tmp != a){
 	    s = s+tmp.getData() + " ";
 	    tmp = tmp.getNext();
 	}
 	return s;
     }
+    
+    private int size; 
+    
+    public void delete(int idx){        
+    	Node<E> a = current;
+    	Node<E> b = null;
+        if (idx == 1) 
+        {
+            if (current == current.next)
+            {
+                b = current; 
+            }
+            a = a.getNext();
+            a.setPrev(b);
+            b.setNext(a);
+            size--; 
+            return ;
+        }
+        if (idx == size)
+        {
+            b = b.getPrev();
+            b.setNext(a);
+            a.setPrev(b);
+            size-- ;
+        }
+        Node ptr = a.getNext();
+        for (int i = 2; i <= size; i++)
+        {
+            if (i == idx)
+            {
+                Node p = ptr.getPrev();
+                Node n = ptr.getNext();
+ 
+                p.setNext(n);
+                n.setPrev(p);
+                size-- ;
+                return;
+            }
+            ptr = ptr.getNext();
+        }        
+    } 
+    
+    public int find(E a){
+    	return 1;
+    }
 
     public static void main(String[] args){
-	DoubleLL<String> L = new DoubleLL<String>();
+	DoubleLL2<String> L = new DoubleLL2<String>();
 	System.out.println(L);
 	L.insert("hello");
 	System.out.println(L);
@@ -87,6 +132,6 @@ public class DoubleLL2<E>{
 	System.out.println(L.getCurrent());
 	L.insert("inserted");
 	System.out.println(L);
-
+	L.delete(2);
     }
 }
