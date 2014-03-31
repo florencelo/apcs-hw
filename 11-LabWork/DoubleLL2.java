@@ -56,25 +56,23 @@ public class DoubleLL2<E>{
 	}
     }
 
-    public String toString(){ //change so it ends when it reaches the beginning. No more null.
-    	Node<E> a = current;
-	if(current == a)
-	    return " " + current;
-	while( current.getPrev() != a)
-	    current = current.getPrev();
+    public String toString(){
+    	if(current==null)
+    	    return "";
+    	Node<E> tmp = current.next;
 
-	Node<E> tmp = current;
-	String s = "";
-	while(tmp != a){
-	    s = s+tmp.getData() + " ";
-	    tmp = tmp.getNext();
-	}
-	return s;
-    }
+    	String s = "";
+    	s = s + current.getData() + " ";
+    	while (tmp!=current){
+    	    s = s + tmp.getData() + " ";
+    	    tmp = tmp.getNext();
+    	}
+    	return s;
+        }
     
     private int size; 
     
-    public void delete(int idx){        
+    public void remove(int idx){        
     	Node<E> a = current;
     	Node<E> b = null;
         if (idx == 1) 
@@ -113,15 +111,28 @@ public class DoubleLL2<E>{
         }        
     } 
     
-    public int find(E a){
-    	return 1;
-    }
+    public int find(E d){
+    	int i = 0;
+    	Node<E> tmp = current;
+    	while(tmp!= current.prev){
+    	    if(tmp.getData().equals(d))
+    		return i;
+    	    i++;
+    	    tmp=tmp.next;
+    	}
+    	if(tmp.getData().equals(d)){
+    	    return i;
+    	}
+    	return -1;
+        }
 
     public static void main(String[] args){
 	DoubleLL2<String> L = new DoubleLL2<String>();
 	System.out.println(L);
 	L.insert("hello");
 	System.out.println(L);
+	System.out.println(L);
+
 	L.insert("world");
 	System.out.println(L);
 	L.insert("three");
@@ -132,6 +143,11 @@ public class DoubleLL2<E>{
 	System.out.println(L.getCurrent());
 	L.insert("inserted");
 	System.out.println(L);
-	L.delete(2);
+	L.remove(3);
+	System.out.println(L);
+	L.remove(2);
+	System.out.println(L);
+	L.find("inserted");
+
     }
 }
