@@ -1,32 +1,38 @@
 public class MyArrayStack {
 
 	private int top;
-	private int[] array;
+	private String[] array;
+	private int capacity;
 	
-	public MyArrayStack(int capacity){
-		if(capacity < 0){
-			throw new IllegalArgumentException(
-                    "Please initiate with a positive number.");
-			}
-		array = new int[capacity];
+	public MyArrayStack(){
+		capacity = 10;
+		array = new String[capacity];
 		top = -1; 
 	}
 	
-	public void push(int value) {
-        if (top == array.length)
-              System.out.println("Stack's underlying storage is overflow");
-        top++;
-        array[top] = value;
+	public void push(String value) {
+		String[] tmp = new String[capacity + 1];
+		top++;
+        if (top < array.length){
+            array[top] = value;
+        }else{
+        	capacity ++;
+        	for(int i = 0; i < top; i++){
+        		tmp[i] = array[i];
+        	}
+            tmp[top] = value;
+            array = tmp;
+        }
   }
 
-  public int peek() {
+  public String peek() {
         if (top == -1)
         	System.out.println("Stack is empty");
         return array[top];
   }
 
-  public int pop() {
-	  int curr = array[top];
+  public String pop() {
+	  String curr = array[top];
         if (top == -1)
         	System.out.println("Stack is empty");
         top--;
@@ -43,21 +49,29 @@ public class MyArrayStack {
 		for (int tmp = top; tmp != -1; tmp--){
 		    s = s + array[tmp]+", ";
 		}
-		return s;
+		return s.substring(0,s.length()-2);
   }
   
   public static void main(String[] args){
-		MyArrayStack a = new MyArrayStack(3);
-		a.push(1);
-		a.push(2);
-		a.push(3);
+		MyArrayStack a = new MyArrayStack();
+		a.push("one");
+		a.push("two");
+		a.push("three");
+		a.push("four");
+		a.push("five");
+		a.push("six");
+		a.push("seven");
+		a.push("eight");
+		a.push("nine");
+		a.push("ten");
+		a.push("eleven");
 		System.out.println(a);
 		while (!a.isEmpty()){
 		    System.out.println(a.pop());
 		}
-		a.push(3);
+		a.push("three");
 		System.out.println(a.peek());
-		a.push(4);
+		a.push("four");
 		System.out.println(a.peek());
   }
 }
