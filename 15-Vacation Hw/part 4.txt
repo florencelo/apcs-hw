@@ -43,6 +43,17 @@ changes its direction, it behaves like (makeMove like) a Critter.
 Modify the makeMove method to drop flowers in the old location. A variable is needed to keep track of the
 ChameleonCritter’s current location. After the critter moves, put a flower in its old location only if the critter
 actually moved to a new location. See the modified makeMove method below.
+public void makeMove(Location loc)
+{
+Location oldLoc = getLocation();
+setDirection(getLocation().getDirectionToward(loc));
+super.makeMove(loc);
+if(!oldLoc.equals(loc)) //don't replace yourself if you did not move
+{
+Flower flo = new Flower(getColor());
+flo.putSelfInGrid(getGrid(), oldLoc);
+}
+}
 4. Why doesn’t ChameleonCritter override the getActors method?
 Because it processes the same list of actors that its base class Critter does. Since ChameleonCritter does
 not define a new behavior for getActors, it does not need to override this method.
@@ -80,4 +91,375 @@ If the parameter loc in makeMove is equal to the crab critter’s current location
 A crab critter inherits the processActors method from the Critter class. This method only removes actors
 that are not rocks and not critters. Since a CrabCritter is a Critter, a crab critter will not eat any other
 critter.
+
+
+Part 4 Exercises
+1. Modify the processActors method in ChameleonCritter so that if the list of actors to process is empty,
+the color of the ChameleonCritter will darken (like a flower).
+Add the following static constant to the ChameleonCritter class (like the Flower class).
+private static final double DARKENING_FACTOR = 0.05;
+//Use the code found in the Flower class to darken a ChameleonCritter when it has no neighbors.
+//This code has been put in a method, darken.
+/**
+* Randomly selects a neighbor and changes this critter's color to be the
+* same as that neighbor's. If there are no neighbors, no action is taken.
+*/
+public void processActors(ArrayList<Actor> actors)
+{
+int n = actors.size();
+if (n == 0)
+{
+darken();
+return;
+}
+int r = (int) (Math.random() * n);
+Actor other = actors.get(r);
+setColor(other.getColor());
+}
+/**
+* Darkens this critter's color by DARKENING_FACTOR.
+*/
+private void darken()
+{
+Color c = getColor();
+int red = (int) (c.getRed() * (1 - DARKENING_FACTOR));
+int green = (int) (c.getGreen() * (1 - DARKENING_FACTOR));
+int blue = (int) (c.getBlue() * (1 - DARKENING_FACTOR));
+setColor(new Color(red, green, blue));
+}
+
+
+2. Create a class called ChameleonKid that extends ChameleonCritter as modified in exercise 1. A
+ChameleonKid changes its color to the color of one of the actors immediately in front or behind. If there is no
+actor in either of these locations, then the ChameleonKid darkens like the modified ChameleonCritter.
+Override the getActors method to only return actors that are in front and behind the
+ChameleonCritterKid. This solution uses the getLocationsInDirections method found in
+CrabCritter to find the actors in the required directions and uses the CrabCritter’s version of
+getActors.
+import info.gridworld.actor.Actor;
+import info.gridworld.actor.Critter;
+import info.gridworld.actor.Flower;
+import info.gridworld.grid.Location;
+import info.gridworld.grid.Grid;
+import java.util.ArrayList;
+/**
+* A <code>ChameleonKid</code> takes on the color of neighboring actors
+* that are in front or behind as it moves through the grid. <br />
+*/
+public class ChameleonKid extends ChameleonCritter
+{
+/**
+* Gets the actors for processing. The actors must be contained in the
+* same grid as this critter. Implemented to return the actors that
+* occupy neighboring grid locations in front or behind this critter.
+* @return a list of actors that are neighbors of this critter
+*/
+public ArrayList<Actor> getActors()
+{
+ArrayList<Actor> actors = new ArrayList<Actor>();
+int[] dirs =
+{ Location.AHEAD, Location.HALF_CIRCLE };
+for (Location loc : getLocationsInDirections(dirs))
+{
+Actor a = getGrid().get(loc);
+if (a != null)
+actors.add(a);
+}
+return actors;
+}
+/**
+* Finds the valid adjacent locations of this critter in different
+* directions.
+* @param directions - an array of directions (which are relative to the
+* current direction)
+* @return a set of valid locations that are neighbors of the current
+* location in the given directions
+*/
+public ArrayList<Location> getLocationsInDirections(int[] directions)
+{
+ArrayList<Location> locs = new ArrayList<Location>();
+Grid gr = getGrid();
+Location loc = getLocation();
+for (int d : directions)
+{
+Location neighborLoc = loc.getAdjacentLocation(getDirection() + d);
+if (gr.isValid(neighborLoc))
+locs.add(neighborLoc);
+}
+return locs;
+}
+}
+
+3. Create a class called RockHound that extends Critter. A RockHound gets the actors to be processed in the
+same way as a Critter. It removes any rocks in that list from the grid. A RockHound moves like a
+Critter.
+Override processActors to remove all rocks from the list of neighboring locations.
+import info.gridworld.actor.Actor;
+import info.gridworld.actor.Rock;
+import info.gridworld.actor.Critter;
+import info.gridworld.grid.Location;
+import java.util.ArrayList;
+public class RockHound extends Critter
+{
+/**
+* Processes the actors. Implemented to "eat" (i.e. remove) all rocks
+* <br />
+* Precondition: All objects in <code>actors</code> are contained in the
+* same grid as this critter.
+* @param actors the actors to be processed
+*/
+public void processActors(ArrayList<Actor> actors)
+{
+for (Actor a : actors)
+{
+if (a instanceof Rock)
+a.removeSelfFromGrid();
+}
+}
+}
+
+4. Create a class BlusterCritter that extends Critter. A BlusterCritter looks at all of the neighbors
+within two steps of its current location. (For a BlusterCritter not near an edge, this includes 24 locations). It
+counts the number of critters in those locations. If there are fewer than c critters, the BlusterCritter’s color
+gets brighter (color values increase). If there are c or more critters, the BlusterCritter’s color darkens (color
+values decrease). Here, c is a value that indicates the courage of the critter. It should be set in the constructor.
+Override the getActors and processActors methods to create the new behavior required of the
+BlusterCritter. Create two new methods to lighten and darken the color of the BlusterCritter. To
+darken a BlusterCritter, subtract one from the red, green, and blue components as long as they are greater
+than 0 (or use the same process as the Flower class to darken the critter). To lighten a BlusterCritter, add
+one to the red, green, and blue components as long as they are less than 255.
+import info.gridworld.actor.Actor;
+import info.gridworld.actor.Rock;
+import info.gridworld.actor.Critter;
+import info.gridworld.grid.Location;
+import java.util.ArrayList;
+import java.awt.Color;
+public class BlusterCritter extends Critter
+{
+private int courageFactor;
+public BlusterCritter(int c)
+{
+super();
+courageFactor = c;
+}
+/**
+* Gets the actors for processing. The actors must be contained in the
+* same grid as this critter. Implemented to return the actors that
+* occupy neighboring grid locations within two steps of this critter
+* @return a list of actors that are neighbors of this critter
+*/
+public ArrayList<Actor> getActors()
+{
+ArrayList<Actor> actors = new ArrayList<Actor>();
+Location loc = getLocation();
+for(int r = loc.getRow() - 2; r <= loc.getRow() + 2; r++ )
+for(int c = loc.getCol() - 2; c <= loc.getCol() + 2; c++)
+{
+Location tempLoc = new Location(r,c);
+if(getGrid().isValid(tempLoc))
+{
+Actor a = getGrid().get(tempLoc);
+if(a != null && a != this)
+actors.add(a);
+}
+}
+return actors;
+}
+/**
+* Processes the actors. Implemented to count all the actors within
+* 2 locations of this critter. If there are fewer than courageFactor
+* critters in these locations, this BlusterCritter lightens, otherwise
+* it darkens.
+* Precondition: All objects in <code>actors</code> are contained in the
+* same grid as this critter.
+* @param actors the actors to be processed
+*/
+public void processActors(ArrayList<Actor> actors)
+{
+int count = 0;
+for(Actor a: actors)
+if(a instanceof Critter)
+count++;
+if(count < courageFactor)
+lighten();
+else
+darken();
+}
+/**
+* Darkens this critter's color by subtracting 1 from red, green, and
+* blue components if they are greater than 0. To darken the color
+* faster, subtract a slightly larger value.
+*/
+private void darken()
+{
+Color c = getColor();
+int red = c.getRed();
+int green = c.getGreen();
+int blue = c.getBlue();
+if(red > 0) red--;
+if(green > 0) green--;
+if(blue > 0) blue--;
+setColor(new Color(red, green, blue));
+// this segment of code uses same logic as the flower class to darken
+// an object's color
+// to use this technique add DARKENING_FACTOR as a class instance
+// variable; then replace the active code for darken with the
+// following five lines of code
+// private static final double DARKENING_FACTOR = 0.05;
+// Color c = getColor();
+// int red = (int) (c.getRed() * (1 - DARKENING_FACTOR));
+// int green = (int) (c.getGreen() * (1 - DARKENING_FACTOR));
+// int blue = (int) (c.getBlue() * (1 - DARKENING_FACTOR));
+// setColor(new Color(red, green, blue));
+}
+
+/**
+* Lightens this critter's color by adding 1 to the red, green, and blue
+* components if they are less than 255. To lighten the color faster,
+* add a slightly larger value.
+*/
+private void lighten()
+{
+Color c = getColor();
+int red = c.getRed();
+int green = c.getGreen();
+int blue = c.getBlue();
+if(red < 255) red++;
+if(green < 255) green++;
+if(blue < 255) blue++;
+setColor(new Color(red, green, blue));
+}
+}
+5. Create a class QuickCrab that extends CrabCritter. A QuickCrab processes actors the same way a
+CrabCritter does. A QuickCrab moves to one of the two locations, randomly selected, that are two spaces
+to its right or left, if that location and the intervening location are both empty. Otherwise, a QuickCrab moves like
+a CrabCritter.
+This solution overrides the getMoveLocations method. In this solution, an additional method was created to find
+good locations two spaces away and add them to the ArrayList that getMoveLocations returns.
+import info.gridworld.actor.Actor;
+import info.gridworld.actor.Critter;
+import info.gridworld.grid.Grid;
+import info.gridworld.grid.Location;
+import java.awt.Color;
+import java.util.ArrayList;
+/**
+* A <code>QuickCrab</code> looks at a limited set of neighbors when it
+* eats and moves.<br />
+*/
+public class QuickCrab extends CrabCritter
+{
+public QuickCrab()
+{
+setColor(Color.CYAN);
+}
+/**
+* @return list of empty locations
+* two locations to the right and two locations to the left
+*/
+public ArrayList<Location> getMoveLocations()
+{
+ArrayList<Location> locs = new ArrayList<Location>();
+Grid g = getGrid();
+addIfGoodTwoAwayMove(locs,getDirection() + Location.LEFT);
+addIfGoodTwoAwayMove(locs,getDirection() + Location.RIGHT);
+if (locs.size() == 0)
+return super.getMoveLocations();
+return locs;
+}
+/**
+* Adds a valid and empty two away location in direction dir to the
+* ArrayList locs.
+* To be a valid two away location, the location that is one away in
+* direction dir must also be valid and empty.
+*/
+private void addIfGoodTwoAwayMove(ArrayList<Location> locs,int dir)
+{
+Grid g = getGrid();
+Location loc = getLocation();
+Location temp = loc.getAdjacentLocation(dir);
+if(g.isValid(temp) && g.get(temp) == null)
+{
+Location loc2 = temp.getAdjacentLocation(dir);
+if(g.isValid(loc2) && g.get(loc2)== null)
+locs.add(loc2);
+}
+}
+}
+
+6. Create a class KingCrab that extends CrabCritter. A KingCrab gets the actors to be processed in the
+same way a CrabCritter does. A KingCrab causes each actor that it processes to move one location further
+away from the KingCrab. If the actor cannot move away, the KingCrab removes it from the grid. When the
+KingCrab has completed processing the actors, it moves like a CrabCritter.
+This solution overrides the processActors method. This solution also includes two new methods,
+distanceFrom and moveOneMoreAway, to move an actor away from the KingCrab.
+import info.gridworld.actor.Actor;
+import info.gridworld.actor.Critter;
+import info.gridworld.grid.Grid;
+import info.gridworld.grid.Location;
+import java.awt.Color;
+import java.util.ArrayList;
+/**
+* A <code>KingCrab</code> looks at a limited set of neighbors when it
+* eats and moves.<br />
+*/
+public class KingCrab extends CrabCritter
+{
+public KingCrab()
+{
+setColor(Color.PINK);
+}
+/**
+* Computes the rounded integer distance between two given locations.
+*/
+public int distanceFrom(Location loc1, Location loc2)
+{
+int x1 = loc1.getRow();
+int y1 = loc1.getCol();
+int x2 = loc2.getRow();
+int y2 = loc2.getCol();
+double dist = Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)) + .5;
+return (int)Math.floor(dist);
+}
+
+/*
+* This method moves the Actor to a location that is one location
+* further away from this KingCrab and returns true. If there is no
+* location that is one location further away, the method returns false.
+*/
+private boolean moveOneMoreAway(Actor a)
+{
+ArrayList<Location> locs =
+getGrid().getEmptyAdjacentLocations(a.getLocation());
+for(Location loc:locs)
+{
+if(distanceFrom(getLocation(), loc) > 1)
+{
+a.moveTo(loc);
+return true;
+}
+}
+return false;
+}
+/*
+* Each actor in the list actors is told to move one location further
+* away from this KingCrab. If that is not possible, the actor is
+* removed from the grid.
+*/
+public void processActors(ArrayList<Actor> actors)
+{
+for (Actor a : actors)
+{
+if (!moveOneMoreAway(a))
+{
+a.removeSelfFromGrid();
+}
+}
+}
+}
+
+
+
+
+
+
 
