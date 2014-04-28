@@ -9,6 +9,7 @@ public class BST {
     
     public void insert(BSTNode a){
     	BSTNode c = root;
+	pointer = root;
     	if(c != null && c.getData() < a.getData()){
     		pointer = c;
     		c = c.getNextL();
@@ -33,7 +34,7 @@ public class BST {
     }
     
     public BSTNode search2(BSTNode c, int x){
-    	if(c == null){
+    	if(c == null || c.getData() == x){
     		return c;
     	}
     	else{
