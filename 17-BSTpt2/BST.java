@@ -100,7 +100,7 @@ public class BST {
 	}else{
 	    System.out.println(n.getData());
 	    traverse(n.getNextL());
-	    traverse(n.getNextL());
+	    traverse(n.getNextR());
 	}
     }
     
