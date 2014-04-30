@@ -98,8 +98,8 @@ public class BST {
 	if (n == null){
 	    System.out.println("Ain't nothing here yo.");
 	}else{
-	    System.out.println(n.getData());
-	    traverse(n.getNextL());
+	    traverse(n.getNextL()); //prints in order
+	    System.out.println(n.getData());	    
 	    traverse(n.getNextR());
 	}
     }
