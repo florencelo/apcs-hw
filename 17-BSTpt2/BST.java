@@ -105,21 +105,20 @@ public class BST {
     }
 
     /*
-in order Traversal: 
+in order Traversal: -> inorder
 traverse(left)
 process node
 traverse(right)
 
-preorder Traversal:
+preorder Traversal: -> scheme notation
 process node 
 traverse(left)
 traverse(right)
 
-postorder Traversal:
+postorder Traversal: -> reverse polish notation
 traverse(left)
 traverse(right)
 process node
-
      */
     
     public static void main(String [] args){
