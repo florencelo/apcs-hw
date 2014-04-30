@@ -103,6 +103,24 @@ public class BST {
 	    traverse(n.getNextR());
 	}
     }
+
+    /*
+in order Traversal: 
+traverse(left)
+process node
+traverse(right)
+
+preorder Traversal:
+process node 
+traverse(left)
+traverse(right)
+
+postorder Traversal:
+traverse(left)
+traverse(right)
+process node
+
+     */
     
     public static void main(String [] args){
     	BST a = new BST();
