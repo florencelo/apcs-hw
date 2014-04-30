@@ -76,7 +76,7 @@ public class BST {
     	}
     }
     
-    public String toString()
+    /* public String toString()
     {
 	BSTNode L = pointer.getNextL();
 	BSTNode R = pointer.getNextR();
@@ -92,6 +92,16 @@ public class BST {
 	R = R.getNextL();
     }
 	return output;
+	}*/
+
+    public void traverse(BSTNode n){
+	if (n == null){
+	    System.out.println("Ain't nothing here yo.");
+	}else{
+	    System.out.println(n.getData());
+	    traverse(n.getNextL());
+	    traverse(n.getNextL());
+	}
     }
     
     public static void main(String [] args){
@@ -112,6 +122,8 @@ public class BST {
 
     	a.search(2);
     	a.search2(b,2);
+
+	a.traverse(e);
 
     }
 }
