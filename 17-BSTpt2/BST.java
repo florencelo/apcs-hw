@@ -76,7 +76,7 @@ public class BST {
     	}
     }
     
-    public String toString()
+    /* public String toString()
     {
 	BSTNode L = pointer.getNextL();
 	BSTNode R = pointer.getNextR();
@@ -92,7 +92,34 @@ public class BST {
 	R = R.getNextL();
     }
 	return output;
+	}*/
+
+    public void traverse(BSTNode n){
+	if (n == null){
+	    System.out.println("Ain't nothing here yo.");
+	}else{
+	    traverse(n.getNextL()); //prints in order
+	    System.out.println(n.getData());	    
+	    traverse(n.getNextR());
+	}
     }
+
+    /*
+in order Traversal: -> inorder
+traverse(left)
+process node
+traverse(right)
+
+preorder Traversal: -> scheme notation
+process node 
+traverse(left)
+traverse(right)
+
+postorder Traversal: -> reverse polish notation
+traverse(left)
+traverse(right)
+process node
+     */
     
     public static void main(String [] args){
     	BST a = new BST();
@@ -112,6 +139,8 @@ public class BST {
 
     	a.search(2);
     	a.search2(b,2);
+
+	a.traverse(e);
 
     }
 }
