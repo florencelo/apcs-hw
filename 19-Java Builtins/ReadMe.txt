@@ -4,6 +4,6 @@
 
 3. Speed comparison: hashmap vs treemap
 
-4. Does Java have a builtin heap? 
+4. Does Java have a builtin heap? Yes. HeapPriorityQueue. 
 
 5. Implement running medium using it.
